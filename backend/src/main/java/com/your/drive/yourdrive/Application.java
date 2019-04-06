@@ -2,12 +2,14 @@ package com.your.drive.yourdrive;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 
 @SpringBootApplication
-public class YourdriveApplication {
+@EnableOAuth2Sso
+public class Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(YourdriveApplication.class, args);
+		SpringApplication.run(Application.class, args);
 	}
 
 }
