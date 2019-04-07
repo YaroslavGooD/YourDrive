@@ -38,8 +38,8 @@ class SignUpEndpointSpec extends Specification {
     private final static String JSON_REQUEST = "" +
             "{\n" +
             "\t\"email\": \"" + EMAIL + "\",\n" +
-            "\t\"password\": \"dummyPassword\",\n" +
-            "}"
+            "\t\"password\": \"dummyPassword\"" +
+            "\n}"
 
     def "should deserialize SignUpRequest"() {
         given:
@@ -99,7 +99,7 @@ class SignUpEndpointSpec extends Specification {
 
     private RequestEntity<String> createRequest() {
         return RequestEntity
-                .post(uri("/api/controller/signup"))
+                .post(uri("/api/auth/signup"))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(JSON_REQUEST)
     }

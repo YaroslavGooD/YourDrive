@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.1.4.RELEASE</version>
+		<version>2.1.1.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.your.drive</groupId>
@@ -14,7 +14,7 @@
 	<name>yourdrive</name>
 
 	<properties>
-		<java.version>11</java.version>
+		<java.version>8</java.version>
 	</properties>
 
 	<profiles>
@@ -24,13 +24,13 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
-				<category>com.diettherapy.diettherapybackend.UnitTest</category>
+				<category>com.your.drive.yourdrive.UnitTest</category>
 			</properties>
 		</profile>
 		<profile>
 			<id>integration-test</id>
 			<properties>
-				<category>com.diettherapy.diettherapybackend.IntegrationTest</category>
+				<category>com.your.drive.yourdrive.IntegrationTest</category>
 			</properties>
 		</profile>
 	</profiles>
@@ -59,8 +59,6 @@
 			<artifactId>jjwt</artifactId>
 			<version>0.9.1</version>
 		</dependency>
-
-
 
 		<dependency>
 			<groupId>com.h2database</groupId>

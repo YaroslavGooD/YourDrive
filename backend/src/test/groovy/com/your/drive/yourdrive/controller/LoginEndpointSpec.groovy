@@ -42,7 +42,7 @@ class LoginEndpointSpec extends Specification {
         User user = new User(EMAIL, passwordEncoder.encode(PASSWORD))
         LoginRequest loginRequest = new LoginRequest(EMAIL, PASSWORD)
         RequestEntity<LoginRequest> requestEntity = RequestEntity
-                .post(uri("/api/controller/login"))
+                .post(uri("/api/auth/login"))
                 .body(loginRequest)
 
         when:
