@@ -1,0 +1,29 @@
+version: '2.1'
+services:
+  server:
+    build: backend
+    depends_on:
+      database:
+        condition: service_healthy
+    ports:
+      - 8080:8080
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/your_drive?allowPublicKeyRetrieval=TRUE&useSSL=false
+      - SPRING_DATASOURCE_USERNAME=app_user
+      - SPRING_DATASOURCE_PASSWORD=root
+  database:
+    image: mariadb:latest
+    environment:
+      - MYSQL_DATABASE=your_drive
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_USER=app_user
+    healthcheck:
+      test: "/usr/bin/mysql --user=app_user --password=root --execute \"SHOW DATABASES;\""
+      timeout: 5s
+      interval: 2s
+      retries: 10
+    volumes:
+      - my-datavolume:/var/lib/mysql
+volumes:
+  my-datavolume:
