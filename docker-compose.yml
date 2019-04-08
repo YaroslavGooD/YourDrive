@@ -1,5 +1,11 @@
 version: '2.1'
 services:
+  client:
+    build: frontend
+    ports:
+      - 3000:3000
+    environment:
+      - BASE_URL=server:8080/
   server:
     build: backend
     depends_on:
