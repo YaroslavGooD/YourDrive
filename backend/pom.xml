@@ -14,7 +14,7 @@
 	<name>yourdrive</name>
 
 	<properties>
-		<java.version>8</java.version>
+		<java.version>11</java.version>
 	</properties>
 
 	<profiles>
