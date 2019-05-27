@@ -6,4 +6,5 @@ cache:
   directories:
     - "$HOME/.cache"
 script:
-  - mvn clean verify
+  - mvn clean install -f backend/pom.xml
+  - bash docker_push
