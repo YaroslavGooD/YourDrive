@@ -46,28 +46,22 @@ public class FileController {
         FileMeta meta = FileMeta.builder().createdAt(LocalDate.now())
                 .pathKey(key)
                 .owner(user)
-                .size(1337)
+                .size(file.getSize())
                 .contentType(file.getContentType())
                 .build();
 
         return files.saveFile(meta, file.getInputStream())
                 .fold(
-                        ignored -> ResponseEntity.ok("not ok"),
+                        ignored -> ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body("Failed to create file"),
                         ResponseEntity::ok
                 );
     }
 
     @GetMapping("/file")
     public ResponseEntity getFile(@RequestParam Long id) {
-        User user = me();
         Try<ResponseEntity> map = files
                 .getFileMeta(id)
-                .flatMap(meta -> {
-                    if(!meta.getOwner().getId().equals(user.getId())) {
-                        return Try.failure(new Exception("You're not the owner"));
-                    }
-                    return Try.success(meta);
-                })
+                .flatMap(this::isOwner)
                 .flatMap(files::getFile)
                 .map(tuple -> {
                     InputStreamResource resource = new InputStreamResource(tuple._1);
@@ -80,6 +74,26 @@ public class FileController {
                         .body("Failed to load file: "+error.getLocalizedMessage()),
                 x -> x
         );
+    }
+
+    @PostMapping("/delete")
+    public ResponseEntity deleteFile(@RequestParam Long id) {
+        return files.getFileMeta(id)
+                .flatMap(this::isOwner)
+                .flatMap(files::deleteFile)
+                .fold(
+                        err -> ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT)
+                        .body("Failed to remove file"),
+                        ResponseEntity::ok
+                );
+    }
+
+    private Try<FileMeta> isOwner(FileMeta meta) {
+        User user= me();
+        if(!meta.getOwner().getId().equals(user.getId())) {
+            return Try.failure(new Exception("File not found"));
+        }
+        return Try.success(meta);
     }
 
 

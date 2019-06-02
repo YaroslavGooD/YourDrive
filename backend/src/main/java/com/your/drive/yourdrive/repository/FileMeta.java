@@ -30,7 +30,7 @@ public class FileMeta {
 
     private String contentType;
 
-    private Integer size;
+    private Long size;
 
     private LocalDate createdAt;
 }

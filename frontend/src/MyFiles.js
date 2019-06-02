@@ -38,6 +38,9 @@ function MyFiles() {
             >
               Download
             </button>
+            <button onClick={() => Api.deleteFile(file.id, token)}>
+              Delete
+            </button>
           </li>
         ))}
       </ul>

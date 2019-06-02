@@ -18,9 +18,16 @@ function UploadFile() {
     <div>
       <h2>Upload file</h2>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
-        <input type="text" name="uploadFileKey" required {...fileKey} />
-        <input type="file" name="uploadFile" required ref={fileInputRef} />
-        <button type="submit">Upload</button>
+        <div style={{ padding: "10px" }}>
+          <label>File key</label>
+          <input type="text" name="uploadFileKey" required {...fileKey} />
+        </div>
+        <div style={{ padding: "10px" }}>
+          <input type="file" name="uploadFile" required ref={fileInputRef} />
+        </div>
+        <div style={{ padding: "10px" }}>
+          <button type="submit">Upload</button>
+        </div>
       </form>
     </div>
   );

@@ -77,6 +77,9 @@ const Api = {
       { method: "POST", body: formData },
       token
     );
+  },
+  deleteFile: async (id, token) => {
+    request("/api/file/delete?id=" + id, { method: "POST" }, token);
   }
 };
 
