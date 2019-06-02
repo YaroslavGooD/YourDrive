@@ -1,6 +1,6 @@
 #!/bin/bash
-echo "$docker_password" | docker login -u "$docker_username" --password-stdin
-docker build -t $docker_username/frontend frontend 
-docker build -t $docker_username/backend backend 
-docker push $docker_username/frontend
-docker push $docker_username/backend
+echo "$docker_password" | docker login -u "$docker_user" --password-stdin
+docker build -t "$docker_user"/frontend frontend 
+docker build -t "$docker_user"/backend backend 
+docker push "$docker_user"/frontend
+docker push "$docker_user"/backend
