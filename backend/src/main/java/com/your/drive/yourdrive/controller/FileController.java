@@ -43,6 +43,12 @@ public class FileController {
                     .body("File already exists ");
         }
 
+        if(files.usedStorageSize(user) + file.getSize() > files.standartUserSize) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Your storage size is over ");
+        }
+
         FileMeta meta = FileMeta.builder().createdAt(LocalDate.now())
                 .pathKey(key)
                 .owner(user)
@@ -88,6 +94,20 @@ public class FileController {
                 );
     }
 
+    @GetMapping("/files/count")
+    public ResponseEntity<Integer> getMyFilesNumber() {
+        User user = me();
+
+        return ResponseEntity.ok(files.filesNumber(user));
+    }
+
+    @GetMapping("/files/size")
+    public ResponseEntity<Long> getMyFilesSize() {
+        User user = me();
+
+        return ResponseEntity.ok(files.usedStorageSize(user));
+    }
+
     private Try<FileMeta> isOwner(FileMeta meta) {
         User user= me();
         if(!meta.getOwner().getId().equals(user.getId())) {
@@ -95,7 +115,6 @@ public class FileController {
         }
         return Try.success(meta);
     }
-
 
     private User me() {
         UserPrincipal auth = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
