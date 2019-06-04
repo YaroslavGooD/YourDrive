@@ -1,4 +1,4 @@
-![Build status](https://travis-ci.com/sopeal/YourDrive.svg?token=Gxo2vGpZhDjsCPazUf2b&branch=master)
+![Build status](https://travis-ci.com/YaroslavGooD/YourDrive.svg?token=Gxo2vGpZhDjsCPazUf2b&branch=master)
 
 ## Steps to Setup the App
 1. **Make sure you have proper tools installed.**
