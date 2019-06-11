@@ -3,7 +3,7 @@ import { logout } from "./Auth";
 
 function NavBar() {
   return (
-    <div>
+    <div className="NavBar">
       <button type="button" onClick={logout}>
         Logout
       </button>

@@ -12,7 +12,7 @@ function MyFiles() {
   }
 
   return (
-    <div>
+    <div className="MyFiles">
       <h2>My Files</h2>
       <ul>
         {files.map(file => (

@@ -13,6 +13,19 @@ const request = (url, options, token) => {
   });
 };
 
+const FileChangeObserver = {
+  fns: [],
+  sub: fn => {
+    FileChangeObserver.fns.push(fn);
+  },
+  unsub: fn => {
+    FileChangeObserver.fns = FileChangeObserver.fns.filter(f => f !== fn);
+  },
+  trigger: () => {
+    FileChangeObserver.fns.forEach(f => f());
+  }
+};
+
 const Api = {
   login: async (email, password) => {
     const response = await request("/api/auth/login", {
@@ -63,7 +76,10 @@ const Api = {
         setFiles(files);
         isLoading(false);
       };
+      FileChangeObserver.sub(fetching);
       fetching();
+
+      return () => FileChangeObserver.unsub(fetching);
     }, []);
 
     return loading ? "loading" : files;
@@ -76,10 +92,14 @@ const Api = {
       "/api/file/file?key=" + key,
       { method: "POST", body: formData },
       token
-    );
+    ).then(() => {
+      FileChangeObserver.trigger();
+    });
   },
   deleteFile: async (id, token) => {
-    request("/api/file/delete?id=" + id, { method: "POST" }, token);
+    request("/api/file/delete?id=" + id, { method: "POST" }, token).then(() => {
+      FileChangeObserver.trigger();
+    });
   }
 };
 

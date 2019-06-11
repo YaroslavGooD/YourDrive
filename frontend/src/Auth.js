@@ -21,7 +21,7 @@ function LoginForm({ onSubmit }) {
   };
 
   return (
-    <div>
+    <div className="LoginForm">
       <label>Login</label>
       <input type="text" placeholder="Login" {...username} />
 

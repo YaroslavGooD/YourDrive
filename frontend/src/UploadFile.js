@@ -15,7 +15,7 @@ function UploadFile() {
   };
 
   return (
-    <div>
+    <div className="UploadFile">
       <h2>Upload file</h2>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         <div style={{ padding: "10px" }}>
