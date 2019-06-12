@@ -15,7 +15,7 @@ function MyFiles() {
   return (
     <div className="MyFiles">
       <h2>My Files</h2>
-      <p>Files size: {size}</p>
+      <p>Files size: {size} bytes</p>
       <ul>
         {files.map(file => (
           <li>

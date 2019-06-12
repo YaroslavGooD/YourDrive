@@ -102,15 +102,15 @@ const Api = {
     });
   },
   getFilesSize: async token => {
-    request("/api/file/files/size", {}, token);
+    return request("/api/file/files/size", {}, token);
   },
   useFilesSize: () => {
     const token = useToken();
     const [filesSize, setFilesSize] = React.useState(undefined);
     React.useEffect(() => {
       const request = async () => {
-        const size = await Api.getFilesSize(token);
-
+        const response = await Api.getFilesSize(token);
+        const size = await response.json();
         setFilesSize(size);
       };
       FileChangeObserver.sub(request);
