@@ -21,4 +21,6 @@ public interface FileMetaRepository extends JpaRepository<FileMeta, Long> {
 
     FileMeta save(FileMeta file);
 
+    Optional<FileMeta> findByToken(String token);
+
 }

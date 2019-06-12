@@ -33,4 +33,6 @@ public class FileMeta {
     private Long size;
 
     private LocalDate createdAt;
+
+    private String token;
 }

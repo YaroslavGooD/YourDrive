@@ -9,6 +9,7 @@ import com.your.drive.yourdrive.service.FileService;
 import io.vavr.control.Try;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/file")
@@ -64,6 +66,7 @@ public class FileController {
                 .owner(user)
                 .size(file.getSize())
                 .contentType(file.getContentType())
+                .token(UUID.randomUUID().toString())
                 .build();
 
         return files.saveFile(meta, file.getInputStream())
@@ -116,6 +119,31 @@ public class FileController {
         User user = me();
 
         return ResponseEntity.ok(files.standardUserSize);
+    }
+    
+    @GetMapping("/shared")
+    public ResponseEntity getSharedFile(@RequestParam String token) {
+        Try<ResponseEntity> map = files
+                .getFileMeta(token)
+                .flatMap(files::getFile)
+                .map(tuple -> {
+                    InputStreamResource resource = new InputStreamResource(tuple._1);
+                    return ResponseEntity.ok().contentType(tuple._2).body(resource);
+                });
+
+        return map.fold(
+                error ->  ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body("Failed to load shared file: "+error.getLocalizedMessage()),
+                x -> x
+        );
+    }
+
+    @GetMapping("/share")
+    public ResponseEntity<String> shareFile(@RequestParam Long id) {
+        Try<String> result = files.getTokenFile(id);
+        return new ResponseEntity<String>(result.get(), HttpStatus.CREATED);
+
     }
 
     private Try<FileMeta> isOwner(FileMeta meta) {
