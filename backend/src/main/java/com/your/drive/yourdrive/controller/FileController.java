@@ -4,6 +4,7 @@ import com.your.drive.yourdrive.repository.FileMeta;
 import com.your.drive.yourdrive.repository.User;
 import com.your.drive.yourdrive.repository.UserRepository;
 import com.your.drive.yourdrive.security.UserPrincipal;
+import com.your.drive.yourdrive.service.EmailService;
 import com.your.drive.yourdrive.service.FileService;
 import io.vavr.control.Try;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class FileController {
 
     private final FileService files;
     private final UserRepository users;
+    private final EmailService email;
 
     @GetMapping("/files")
     public ResponseEntity<List<FileMeta>> getMyFiles() {
@@ -43,9 +45,16 @@ public class FileController {
                     .body("File already exists ");
         }
 
-        if(files.usedStorageSize(user) + file.getSize() > files.standartUserSize) {
+        if(files.usedStorageSize(user) + file.getSize() > files.standardUserSize) {
+            try {
+                email.sendEmail(user.getEmail(),"The size of your storage is over, upgrade your level!", "YourDrive" );
+            } catch (Exception e) {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body("Authenticated user doesn't exist");
+            }
             return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
+                    .status(HttpStatus.LENGTH_REQUIRED)
                     .body("Your storage size is over ");
         }
 
@@ -94,18 +103,19 @@ public class FileController {
                 );
     }
 
-    @GetMapping("/files/count")
-    public ResponseEntity<Integer> getMyFilesNumber() {
-        User user = me();
-
-        return ResponseEntity.ok(files.filesNumber(user));
-    }
-
     @GetMapping("/files/size")
     public ResponseEntity<Long> getMyFilesSize() {
         User user = me();
 
         return ResponseEntity.ok(files.usedStorageSize(user));
+    }
+
+    @GetMapping("/files/standardUser")
+    public ResponseEntity<Long> getStandardUser() throws Exception {
+        User user = me();
+
+
+        return ResponseEntity.ok(files.standardUserSize);
     }
 
     private Try<FileMeta> isOwner(FileMeta meta) {
