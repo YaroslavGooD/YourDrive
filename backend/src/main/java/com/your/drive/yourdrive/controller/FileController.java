@@ -114,7 +114,6 @@ public class FileController {
     public ResponseEntity<Long> getStandardUser() throws Exception {
         User user = me();
 
-
         return ResponseEntity.ok(files.standardUserSize);
     }
 
