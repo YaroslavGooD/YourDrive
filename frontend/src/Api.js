@@ -100,6 +100,26 @@ const Api = {
     request("/api/file/delete?id=" + id, { method: "POST" }, token).then(() => {
       FileChangeObserver.trigger();
     });
+  },
+  getFilesSize: async token => {
+    return request("/api/file/files/size", {}, token);
+  },
+  useFilesSize: () => {
+    const token = useToken();
+    const [filesSize, setFilesSize] = React.useState(undefined);
+    React.useEffect(() => {
+      const request = async () => {
+        const response = await Api.getFilesSize(token);
+        const size = await response.json();
+        setFilesSize(size);
+      };
+      FileChangeObserver.sub(request);
+      request();
+
+      return () => FileChangeObserver.unsub(request);
+    }, []);
+
+    return filesSize;
   }
 };
 

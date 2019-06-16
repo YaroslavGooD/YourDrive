@@ -6,14 +6,16 @@ import { useToken } from "./Auth";
 function MyFiles() {
   const files = Api.useMyFiles();
   const token = useToken();
+  const size = Api.useFilesSize();
 
-  if (files === "loading") {
+  if (files === "loading" || size === undefined) {
     return "loading";
   }
 
   return (
     <div className="MyFiles">
       <h2>My Files</h2>
+      <p>Files size: {size} bytes</p>
       <ul>
         {files.map(file => (
           <li>

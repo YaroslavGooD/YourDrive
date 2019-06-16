@@ -23,6 +23,8 @@ public class FileService {
 
     private final FileMetaRepository repo;
 
+    public final long standardUserSize = 5000000;
+
     private String fileMetaToKey(FileMeta meta) {
         return meta.getOwner().getId() + meta.getPathKey();
     }
@@ -54,5 +56,16 @@ public class FileService {
             repo.deleteById(meta.getId());
             return meta;
         });
+    }
+
+    public Long usedStorageSize(User owner) {
+        return repo.findByOwner(owner).stream()
+                .map(file -> file.getSize())
+                .reduce(Long::sum)
+                .orElse(0L);
+    }
+
+    public int filesNumber(User owner) {
+        return repo.findByOwner(owner).size();
     }
 }

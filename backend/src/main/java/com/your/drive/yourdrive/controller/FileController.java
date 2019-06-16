@@ -4,6 +4,7 @@ import com.your.drive.yourdrive.repository.FileMeta;
 import com.your.drive.yourdrive.repository.User;
 import com.your.drive.yourdrive.repository.UserRepository;
 import com.your.drive.yourdrive.security.UserPrincipal;
+import com.your.drive.yourdrive.service.EmailService;
 import com.your.drive.yourdrive.service.FileService;
 import io.vavr.control.Try;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class FileController {
 
     private final FileService files;
     private final UserRepository users;
+    private final EmailService email;
 
     @GetMapping("/files")
     public ResponseEntity<List<FileMeta>> getMyFiles() {
@@ -37,10 +39,24 @@ public class FileController {
     public ResponseEntity saveFile(@RequestBody MultipartFile file, @RequestParam String key) throws IOException {
         User user = me();
 
-        if(files.fileExists(user, key)){
+        if (files.fileExists(user, key)) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body("File already exists ");
+        }
+
+        if (files.usedStorageSize(user) + file.getSize() > files.standardUserSize) {
+            try {
+                email.sendEmail(user.getEmail(), "The size of your storage is over, upgrade your level!", "YourDrive");
+            } catch (Exception e) {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body("Authenticated user doesn't exist");
+            }
+
+            return ResponseEntity
+                    .status(HttpStatus.LENGTH_REQUIRED)
+                    .body("Your storage size is over ");
         }
 
         FileMeta meta = FileMeta.builder().createdAt(LocalDate.now())
@@ -69,9 +85,9 @@ public class FileController {
                 });
 
         return map.fold(
-                error ->  ResponseEntity
+                error -> ResponseEntity
                         .status(HttpStatus.BAD_REQUEST)
-                        .body("Failed to load file: "+error.getLocalizedMessage()),
+                        .body("Failed to load file: " + error.getLocalizedMessage()),
                 x -> x
         );
     }
@@ -83,19 +99,32 @@ public class FileController {
                 .flatMap(files::deleteFile)
                 .fold(
                         err -> ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT)
-                        .body("Failed to remove file"),
+                                .body("Failed to remove file"),
                         ResponseEntity::ok
                 );
     }
 
+    @GetMapping("/files/size")
+    public ResponseEntity getMyFilesSize() {
+        User user = me();
+
+        return ResponseEntity.ok(files.usedStorageSize(user));
+    }
+
+    @GetMapping("/files/standardUser")
+    public ResponseEntity<Long> getStandardUser() throws Exception {
+        User user = me();
+
+        return ResponseEntity.ok(files.standardUserSize);
+    }
+
     private Try<FileMeta> isOwner(FileMeta meta) {
-        User user= me();
-        if(!meta.getOwner().getId().equals(user.getId())) {
+        User user = me();
+        if (!meta.getOwner().getId().equals(user.getId())) {
             return Try.failure(new Exception("File not found"));
         }
         return Try.success(meta);
     }
-
 
     private User me() {
         UserPrincipal auth = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
