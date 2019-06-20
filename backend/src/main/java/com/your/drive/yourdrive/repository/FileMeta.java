@@ -12,6 +12,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -34,5 +35,5 @@ public class FileMeta {
 
     private LocalDate createdAt;
 
-    private String token;
+    private String token = UUID.randomUUID().toString();
 }

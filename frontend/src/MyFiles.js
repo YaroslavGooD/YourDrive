@@ -2,6 +2,7 @@ import React from "react";
 import Api from "./Api";
 import download from "downloadjs";
 import { useToken } from "./Auth";
+import ShareFile from "./ShareFile";
 
 function MyFiles() {
   const files = Api.useMyFiles();
@@ -19,7 +20,7 @@ function MyFiles() {
       <ul>
         {files.map(file => (
           <li>
-            #{file.id} — {file.pathKey} {file.token}
+            #{file.id} — {file.pathKey}
             <button
               type="button"
               onClick={async () => {
@@ -43,23 +44,7 @@ function MyFiles() {
             <button onClick={() => Api.deleteFile(file.id, token)}>
               Delete
             </button>
-            <button
-              type="button"
-              onClick={async () => {
-                const response = await fetch(
-                  "http://localhost:8080/api/file/share?id=" + file.id,
-                  {
-                    method: "GET",
-                    headers: {
-                      Authorization: "Bearer " + token
-                    }
-                  }
-                );
-                console.log(response);
-              }}
-            >
-              Generate Link
-            </button>
+            <ShareFile fileId={file.id} />
           </li>
         ))}
       </ul>
