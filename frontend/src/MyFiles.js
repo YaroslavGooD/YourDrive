@@ -2,7 +2,6 @@ import React from "react";
 import Api from "./Api";
 import download from "downloadjs";
 import { useToken } from "./Auth";
-import ShareFile from "./ShareFile";
 
 function MyFiles() {
   const files = Api.useMyFiles();
@@ -44,7 +43,6 @@ function MyFiles() {
             <button onClick={() => Api.deleteFile(file.id, token)}>
               Delete
             </button>
-            <ShareFile fileId={file.id} />
           </li>
         ))}
       </ul>
