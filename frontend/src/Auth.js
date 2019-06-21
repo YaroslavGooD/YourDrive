@@ -21,19 +21,21 @@ function LoginForm({ onSubmit }) {
   };
 
   return (
-    <div className="LoginForm">
+    <div className="LoginForm Card">
       <label>Login</label>
       <input type="text" placeholder="Login" {...username} />
 
       <label>Password</label>
       <input type="password" placeholder="Password" {...password} />
 
-      <button type="button" onClick={submit(SubmitType.Login)}>
-        Login
-      </button>
-      <button type="button" onClick={submit(SubmitType.Signup)}>
-        Signup
-      </button>
+      <div>
+        <button type="button" onClick={submit(SubmitType.Login)}>
+          Login
+        </button>
+        <button type="button" onClick={submit(SubmitType.Signup)}>
+          Signup
+        </button>
+      </div>
     </div>
   );
 }
@@ -75,7 +77,7 @@ function Auth(props) {
 
   if (!token) {
     return (
-      <>
+      <div className="Content">
         {errors.length > 0 && (
           <div>
             <ul>
@@ -86,7 +88,7 @@ function Auth(props) {
           </div>
         )}
         <LoginForm onSubmit={handleSubmit} />
-      </>
+      </div>
     );
   }
 
