@@ -33,6 +33,5 @@ services:
       retries: 10
     volumes:
       - my-datavolume:/var/lib/mysql
-      - ./backend/src/main/resources/db/migration/V1.0__Create.sql:/docker-entrypoint-initdb.d/init.sql
 volumes:
   my-datavolume:
