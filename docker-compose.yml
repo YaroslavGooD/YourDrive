@@ -33,5 +33,7 @@ services:
       retries: 10
     volumes:
       - my-datavolume:/var/lib/mysql
+    command:
+      - bash -c "mysql --user=app_user --password=root --execute 'grant all privileges on *.* to `app_user`@`%`;'"
 volumes:
   my-datavolume:

@@ -128,12 +128,6 @@
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-
     </dependencies>
 
     <build>
@@ -171,53 +165,53 @@
                     </includes>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.flywaydb</groupId>
-                <artifactId>flyway-maven-plugin</artifactId>
-                <version>${flyway.version}</version>
-                <executions>
-                    <execution>
-                        <id>create-db</id>
-                        <goals>
-                            <goal>migrate</goal>
-                        </goals>
-                        <configuration>
-                            <driver>org.mariadb.jdbc.Driver</driver>
-                            <url>jdbc:mariadb://localhost:3306</url>
-                            <user>root</user>
-                            <password>root</password>
-<!--                            <placeholders>-->
-<!--                                <DATABASE.NAME>your_drive</DATABASE.NAME>-->
-<!--                            </placeholders>-->
-                            <locations>
-                                <location>src/main/resources/db/migration/V1.0__Base.sql</location>
-                            </locations>
-                        </configuration>
-                    </execution>
+<!--            <plugin>-->
+<!--                <groupId>org.flywaydb</groupId>-->
+<!--                <artifactId>flyway-maven-plugin</artifactId>-->
+<!--                <version>${flyway.version}</version>-->
+<!--                <executions>-->
 <!--                    <execution>-->
-<!--                        <id>migrate-db</id>-->
+<!--                        <id>create-db</id>-->
 <!--                        <goals>-->
 <!--                            <goal>migrate</goal>-->
 <!--                        </goals>-->
 <!--                        <configuration>-->
 <!--                            <driver>org.mariadb.jdbc.Driver</driver>-->
-<!--                            <url>jdbc:mariadb://localhost:3306/your_drive</url>-->
-<!--                            <user>app_user</user>-->
+<!--                            <url>jdbc:mariadb://localhost:3306</url>-->
+<!--                            <user>root</user>-->
 <!--                            <password>root</password>-->
+<!--&lt;!&ndash;                            <placeholders>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <DATABASE.NAME>your_drive</DATABASE.NAME>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </placeholders>&ndash;&gt;-->
 <!--                            <locations>-->
-<!--                                <location>src/main/resources/db/migration/V1.1__Init.sql</location>-->
+<!--                                <location>src/main/resources/db/migration/V1.0__Base.sql</location>-->
 <!--                            </locations>-->
 <!--                        </configuration>-->
 <!--                    </execution>-->
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.mariadb.jdbc</groupId>
-                        <artifactId>mariadb-java-client</artifactId>
-                        <version>1.1.7</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
+<!--&lt;!&ndash;                    <execution>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <id>migrate-db</id>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <goals>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <goal>migrate</goal>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </goals>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <configuration>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <driver>org.mariadb.jdbc.Driver</driver>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <url>jdbc:mariadb://localhost:3306/your_drive</url>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <user>app_user</user>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <password>root</password>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <locations>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <location>src/main/resources/db/migration/V1.1__Init.sql</location>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </locations>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </configuration>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </execution>&ndash;&gt;-->
+<!--                </executions>-->
+<!--                <dependencies>-->
+<!--                    <dependency>-->
+<!--                        <groupId>org.mariadb.jdbc</groupId>-->
+<!--                        <artifactId>mariadb-java-client</artifactId>-->
+<!--                        <version>1.1.7</version>-->
+<!--                    </dependency>-->
+<!--                </dependencies>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 
