@@ -49,16 +49,14 @@ public class FileController {
 
         if (files.usedStorageSize(user) + file.getSize() > files.standardUserSize) {
             try {
-                email.sendEmail(user.getEmail(), "The size of your storage is over, upgrade your level!", "YourDrive");
+                email.sendEmail(user.getEmail(), "You don't have enough space, upgrade your account", "YourDrive");
             } catch (Exception e) {
-                return ResponseEntity
-                        .status(HttpStatus.BAD_REQUEST)
-                        .body("Authenticated user doesn't exist");
+                System.out.println(e.getMessage());
             }
 
             return ResponseEntity
-                    .status(HttpStatus.LENGTH_REQUIRED)
-                    .body("Your storage size is over ");
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("You don't have enough space");
         }
 
         FileMeta meta = FileMeta.builder().createdAt(LocalDate.now())

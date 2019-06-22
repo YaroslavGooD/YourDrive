@@ -88,13 +88,20 @@ const Api = {
     const formData = new FormData();
     formData.append("file", file);
 
-    request(
+    const response = await request(
       "/api/file/file?key=" + key,
       { method: "POST", body: formData },
       token
-    ).then(() => {
-      FileChangeObserver.trigger();
-    });
+    );
+    FileChangeObserver.trigger();
+
+    const text = await response.text();
+
+    try {
+      JSON.parse(text);
+    } catch (_) {
+      return text;
+    }
   },
   deleteFile: async (id, token) => {
     request("/api/file/delete?id=" + id, { method: "POST" }, token).then(() => {
