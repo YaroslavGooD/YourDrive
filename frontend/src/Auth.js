@@ -50,7 +50,6 @@ export const logout = () => {
 function Auth(props) {
   const [token, setToken] = useLocalStorage("token", undefined);
   const [errors, setErrors] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
 
   const login = async ({ login, password }) => {
     const responseToken = await Api.login(login, password);
@@ -66,13 +65,11 @@ function Auth(props) {
 
   const handleSubmit = async ({ type, ...form }) => {
     setErrors([]);
-    setIsLoading(true);
 
     await {
       [SubmitType.Login]: () => login(form),
       [SubmitType.Signup]: () => signup(form)
     }[type]();
-    setIsLoading(false);
   };
 
   if (!token) {
