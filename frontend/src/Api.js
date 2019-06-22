@@ -120,6 +120,13 @@ const Api = {
     }, []);
 
     return filesSize;
+  },
+  share: async (id, token) => {
+    const response = await request("/api/file/share?id=" + id, {}, token);
+    const fileToken = await response.text();
+    const url = BASE_URL + "/api/file/shared?token=" + fileToken;
+
+    return url;
   }
 };
 

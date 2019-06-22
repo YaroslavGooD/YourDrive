@@ -46,6 +46,14 @@ public class FileService {
                 .map(_ignored -> repo.save(meta));
     }
 
+    public Try<String> getTokenFile(Long id) {
+        return Try.of(() -> repo.findById(id).orElseThrow(() -> new Exception("File not found")).getToken());
+    }
+
+    public Try<FileMeta> getFileMeta(String token) {
+        return Try.of(() -> repo.findByToken(token).orElseThrow(() -> new Exception("File not found")));
+    }
+
     public Try<Tuple2<InputStream, MediaType>> getFile(FileMeta meta) {
         return fs.get(fileMetaToKey(meta))
                 .map(stream -> new Tuple2<>(stream, MediaType.parseMediaType(meta.getContentType())));

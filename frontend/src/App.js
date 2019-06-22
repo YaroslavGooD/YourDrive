@@ -10,9 +10,10 @@ function App() {
     <div className="App">
       <Auth>
         <NavBar />
-        App
-        <MyFiles />
-        <UploadFile />
+        <div className="Content">
+          <UploadFile />
+          <MyFiles />
+        </div>
       </Auth>
     </div>
   );
