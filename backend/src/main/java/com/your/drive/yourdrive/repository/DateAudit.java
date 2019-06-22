@@ -17,7 +17,7 @@ import java.time.Instant;
 @EqualsAndHashCode
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class DateAudit {
+abstract class DateAudit {
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

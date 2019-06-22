@@ -10,24 +10,22 @@ import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 
 class LocalFileSystem implements FileSystem {
 
-    private final String prefix = "data/";
+    private static final String PREFIX = "data/";
 
     public Try<String> store(String key, InputStream stream) {
         return Try.of(() -> {
-            copyInputStreamToFile(stream, new File(prefix+key));
+            copyInputStreamToFile(stream, new File(PREFIX +key));
             return key;
         });
     }
 
     public Try<InputStream> get(String key) {
-        return Try.of(() -> {
-            return FileUtils.openInputStream(new File(prefix+key));
-        });
+        return Try.of(() -> FileUtils.openInputStream(new File(PREFIX +key)));
     }
 
     public Try<String> delete(String key) {
         return Try.of(() -> {
-            FileUtils.forceDelete(new File(prefix+key));
+            FileUtils.forceDelete(new File(PREFIX +key));
             return key;
         });
     }

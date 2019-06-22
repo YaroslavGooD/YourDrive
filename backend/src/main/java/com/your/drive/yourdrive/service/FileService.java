@@ -19,11 +19,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FileService {
 
+    private static final String FILE_NOT_FOUND_MESSAGE = "File not found";
     private final FileSystem fs = new LocalFileSystem();
-
     private final FileMetaRepository repo;
-
-    public final long standardUserSize = 5000000;
 
     private String fileMetaToKey(FileMeta meta) {
         return meta.getOwner().getId() + meta.getPathKey();
@@ -34,7 +32,7 @@ public class FileService {
     }
 
     public Try<FileMeta> getFileMeta(Long id) {
-        return Try.of(() -> repo.findById(id).orElseThrow(() -> new Exception("File not found")));
+        return Try.of(() -> repo.findById(id).orElseThrow(() -> new Exception(FILE_NOT_FOUND_MESSAGE)));
     }
 
     public List<FileMeta> getFileMetas(User owner) {
@@ -43,15 +41,15 @@ public class FileService {
 
     public Try<FileMeta> saveFile(FileMeta meta, InputStream fileStream) {
         return fs.store(fileMetaToKey(meta), fileStream)
-                .map(_ignored -> repo.save(meta));
+                .map(ignored -> repo.save(meta));
     }
 
     public Try<String> getTokenFile(Long id) {
-        return Try.of(() -> repo.findById(id).orElseThrow(() -> new Exception("File not found")).getToken());
+        return Try.of(() -> repo.findById(id).orElseThrow(() -> new Exception(FILE_NOT_FOUND_MESSAGE)).getToken());
     }
 
     public Try<FileMeta> getFileMeta(String token) {
-        return Try.of(() -> repo.findByToken(token).orElseThrow(() -> new Exception("File not found")));
+        return Try.of(() -> repo.findByToken(token).orElseThrow(() -> new Exception(FILE_NOT_FOUND_MESSAGE)));
     }
 
     public Try<Tuple2<InputStream, MediaType>> getFile(FileMeta meta) {
@@ -68,12 +66,9 @@ public class FileService {
 
     public Long usedStorageSize(User owner) {
         return repo.findByOwner(owner).stream()
-                .map(file -> file.getSize())
+                .map(FileMeta::getSize)
                 .reduce(Long::sum)
                 .orElse(0L);
     }
 
-    public int filesNumber(User owner) {
-        return repo.findByOwner(owner).size();
-    }
 }
