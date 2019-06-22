@@ -8,8 +8,8 @@ import com.your.drive.yourdrive.service.EmailService;
 import com.your.drive.yourdrive.service.FileService;
 import io.vavr.control.Try;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,11 +24,14 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/file")
 @RequiredArgsConstructor
-public class FileController {
+class FileController {
 
     private final FileService files;
     private final UserRepository users;
     private final EmailService email;
+
+    @Value("${app.standardUserFileLimitInBytes}")
+    private long standardUserFileLimitInBytes;
 
     @GetMapping("/files")
     public ResponseEntity<List<FileMeta>> getMyFiles() {
@@ -47,7 +50,7 @@ public class FileController {
                     .body("File already exists ");
         }
 
-        if (files.usedStorageSize(user) + file.getSize() > files.standardUserSize) {
+        if (files.usedStorageSize(user) + file.getSize() > standardUserFileLimitInBytes) {
             try {
                 email.sendEmail(user.getEmail(), "You don't have enough space, upgrade your account", "YourDrive");
             } catch (Exception e) {
@@ -113,10 +116,8 @@ public class FileController {
     }
 
     @GetMapping("/files/standardUser")
-    public ResponseEntity<Long> getStandardUser() throws Exception {
-        User user = me();
-
-        return ResponseEntity.ok(files.standardUserSize);
+    public ResponseEntity<Long> getStandardUser() {
+        return ResponseEntity.ok(standardUserFileLimitInBytes);
     }
     
     @GetMapping("/shared")
@@ -140,7 +141,7 @@ public class FileController {
     @GetMapping("/share")
     public ResponseEntity<String> shareFile(@RequestParam Long id) {
         Try<String> result = files.getTokenFile(id);
-        return new ResponseEntity<String>(result.get(), HttpStatus.CREATED);
+        return new ResponseEntity<>(result.get(), HttpStatus.CREATED);
 
     }
 

@@ -1,17 +1,22 @@
 package com.your.drive.yourdrive.security;
 
 import com.your.drive.yourdrive.repository.EmailSender;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class EmailSenderImpl implements EmailSender {
-    @Autowired
-    private JavaMailSender javaMailSender;
+
+    private final JavaMailSender javaMailSender;
+
     @Override
     public void sendEmail(String to, String title, String content) {
         MimeMessage mail = javaMailSender.createMimeMessage();
@@ -21,7 +26,7 @@ public class EmailSenderImpl implements EmailSender {
             helper.setSubject(title);
             helper.setText(content, true);
         } catch (MessagingException e) {
-            e.printStackTrace();
+            log.error("The email was not sent.", e);
         }
         javaMailSender.send(mail);
     }

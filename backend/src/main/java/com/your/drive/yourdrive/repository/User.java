@@ -1,10 +1,7 @@
 package com.your.drive.yourdrive.repository;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.Entity;
@@ -18,6 +15,7 @@ import javax.validation.constraints.Size;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 @Entity
 public class User extends DateAudit {
 
