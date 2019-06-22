@@ -16,7 +16,6 @@ function MyFiles() {
     <div className="MyFiles Card">
       <h2>My Files</h2>
       <p>Files size: {size} bytes</p>
-      <ul>
       <ul className="FilesList">
         {files.map(file => (
           <li className="FilesList__file">
