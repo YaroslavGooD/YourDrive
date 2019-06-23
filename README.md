@@ -8,7 +8,7 @@
 2. **Clone the application.**
 
 	```bash
-	git clone https://github.com/sopeal/YourDrive
+	git clone https://github.com/YaroslavGooD/YourDrive
 	cd YourDrive
 	```   
 
