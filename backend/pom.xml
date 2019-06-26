@@ -17,24 +17,6 @@
 		<java.version>11</java.version>
 	</properties>
 
-	<profiles>
-		<profile>
-			<id>dev</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<properties>
-				<category>com.your.drive.yourdrive.UnitTest</category>
-			</properties>
-		</profile>
-		<profile>
-			<id>integration-test</id>
-			<properties>
-				<category>com.your.drive.yourdrive.IntegrationTest</category>
-			</properties>
-		</profile>
-	</profiles>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -153,7 +135,6 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.20</version>
 				<configuration>
-					<groups>${category}</groups>
 					<includes>
 						<include>**/*Spec.java</include>
 					</includes>

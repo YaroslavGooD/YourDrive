@@ -1,14 +1,12 @@
 package com.your.drive.yourdrive.repository
 
-import com.your.drive.yourdrive.IntegrationTest
-import org.junit.experimental.categories.Category
+
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import spock.lang.Specification
 
 import java.time.Instant
 
-@Category(IntegrationTest.class)
 @DataJpaTest
 class UserRepositorySpec extends Specification {
 
